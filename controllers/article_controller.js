@@ -16,9 +16,8 @@ const createArticle = async (req, res) => {
     try {
         validations.validateDataArticles(title, content);
     } catch (error) {
-        console.log(error.message)
         return res.status(400).json({
-            status: "400",
+            status: 400,
             message: "No valid data"
         });
     }
@@ -28,12 +27,13 @@ const createArticle = async (req, res) => {
             content: content
         });
         return res.status(200).json({
-            status: "Success",
-            message: "The article was created successfully"
+            status: 200,
+            message: "The article was created successfully",
+            body: reg
         });
     } catch (error) {
         return res.status(500).json({
-            status: "Internal Server Error",
+            status: 500,
             message: "Error retrieving articles. Please try again later."
         });
     }
@@ -49,13 +49,13 @@ const getArticles = async (req, res) => {
 
         if (!articles || articles.length === 0) {
             return res.status(404).json({
-                status: "Not Found",
+                status: 404,
                 message: "No articles found"
             });
         }
 
         return res.status(200).json({
-            status: "Success",
+            status: 200,
             length: articles.length,
             message: articles
         });
@@ -63,7 +63,7 @@ const getArticles = async (req, res) => {
         console.error("Error retrieving articles:", error);
 
         return res.status(500).json({
-            status: "Internal Server Error",
+            status: 500,
             message: "Error retrieving articles. Please try again later."
         });
     }
@@ -74,7 +74,7 @@ const findOneArticle = async (req, res) => {
         let reg = await Article.findById(req.params.id);
         if (reg != null) {
             return res.status(200).send({
-                status: "Success",
+                status: 200,
                 message: reg
             });
         } else {
@@ -85,7 +85,7 @@ const findOneArticle = async (req, res) => {
         }
     } catch (error) {
         return res.status(500).json({
-            status: "Internal Server Error",
+            status: 500,
             message: "Error retrieving articles. Please try again later."
         });
     }
@@ -100,13 +100,13 @@ const deleteArticle = async (req, res) => {
             });
         } else {
             return res.status(400).send({
-                status: "Not Found",
+                status: 400,
                 message: "Article not found"
             });
         }
     } catch (error) {
         return res.status(500).json({
-            status: "Internal Server Error",
+            status: 500,
             message: "Error retrieving articles. Please try again later."
         });
     }
@@ -116,10 +116,9 @@ const updateArticle = async (req, res) => {
     let { title, content } = req.body;
     try {
         await validations.validateDataArticles(title, content);
-    } catch (error) {
-        console.log(error.message)
+    } catch (error) {        
         return res.status(400).json({
-            status: "400",
+            status: 400,
             message: "No valid data"
         });
     }
@@ -127,19 +126,19 @@ const updateArticle = async (req, res) => {
         let reg = await Article.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (reg != null) {
             return res.status(200).json({
-                status: "Update success",
+                status: 200,
                 message: reg
             });
         } else {
             return res.status(400).json({
-                status: "Not Found",
+                status: 400,
                 message: "Article not found"
             });
         }
 
     } catch (error) {
         return res.status(500).json({
-            status: "Internal Server Error",
+            status: 500,
             message: "Error retrieving articles. Please try again later."
         });
     }
@@ -166,26 +165,26 @@ const uploadImage = async (req, res) => {
                 let reg = await Article.findByIdAndUpdate(req.params.id, { image: filename }, { new: true });
                 if (reg != null) {
                     return res.status(200).json({
-                        status: "Update success",
+                        status: 200,
                         message: reg
                     });
                 } else {
                     return res.status(400).json({
-                        status: "Not Found",
+                        status: 400,
                         message: "Article not found"
                     });
                 }
 
             } catch (error) {
                 return res.status(500).json({
-                    status: "Internal Server Error",
+                    status: 500,
                     message: "Error retrieving articles. Please try again later."
                 });
             }
         }
     } catch (error) {
         return res.status(500).json({
-            status: "Internal Server Error",
+            status: 500,
             message: "Error retrieving articles. Please try again later."
         });
     }
@@ -198,14 +197,14 @@ const getImage = (req, res) => {
                 return res.sendFile(path.resolve(lpath));
             } else {
                 return res.status(404).json({
-                    status: "Not Access",
+                    status: 404,
                     message: "The image could not be obtained"
                 });
             }
         })
     } catch (error) {
         return res.status(500).json({
-            status: "Internal Server Error",
+            status: 500,
             message: "Error retrieving articles. Please try again later."
         });
     }
@@ -221,18 +220,18 @@ const search = async (req, res) => {
         });
         if (reg.length > 0) {
             return res.status(200).json({
-                status: "Success",
+                status: 200,
                 message: reg
             });
         } else {
             return res.status(400).json({
-                status: "Not Found",
+                status: 404,
                 message: "No coincidences were found"
             });
         }
     } catch (error) {
         return res.status(500).json({
-            status: "Internal Server Error",
+            status: 500,
             message: "Error retrieving articles. Please try again later."
         });
     }
